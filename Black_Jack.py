@@ -32,6 +32,7 @@ def my_turn(deck):
         if hit_or_stay.lower() == "hit":
             my_cards.append(deck.pop(ceil(random.random() * (12 - card_drawn))))
             card_drawn += 1
+            my_stay = True
         elif hit_or_stay.lower() == "stay":
             my_stay = False
         else:
@@ -48,6 +49,7 @@ def bot_turn(bot_cards):
         print("\n\nYour opponent draw")
         bot_cards.append(deck.pop(ceil(random.random() * (12 - card_drawn))))
         card_drawn += 1
+        bot_stay = True
     else:
         print("\n\nYour opponent stay")
         bot_stay = False
@@ -80,64 +82,77 @@ def on_table(bot_cards, my_cards):
     )
 
 
-deck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "Q", "K", "J"]
-my_cards = []
-bot_cards = []
+play_again = "yes"
 my_score = 0  # how many time the player won the black jack
 bot_score = 0  # how many time the bot won the black jack
-card_drawn = 0  # the number of the card removed in the array
-bot_stay = True
-my_stay = True
-play_again = ""
 
-"""
 print(
     "Welcome to Black Jack, this is slightly different versioin of it, do you want to read the rule?"
 )
 
 rule = input()
-
-if rule == "yes":
+if (
+    rule.lower() == "yes"
+    or rule.lower() == "yup"
+    or rule.lower() == "yay"
+    or rule.lower() == "yeah"
+):
     print(
         "\n- The deck will be made by 13 cards 1-10 with their value and Q, K and J with value 10\n- When a card is on the desk it can't exist another card with the same number/letter\n- Cards will be given A, B, A, B\n- The First card will be covered and only you will know the value of it, same for the bot, from the second on all of them will be uncovered\n- At the beginning of each turn the bot or the player will be able to confirm their cards or draw a single one, once one of this action happen the turn will pass to the other player\n- If both the players confirm who get closer to 21 win, or tie in case both score are equal\n- If both the bot and the player get over 21 win the one with the number closer to 21 else tie\n"
     )
 
-# aggiungo qui il while play_again == "yes":
-# + AGGIUNGO TUTTI I VALORI QUI
+    print("Press entrer to start playing, have fun!!")
+    input()
 
-print("Press entrer to start playing, have fun!!")
-input()
-print("\n\n\n\n")
-"""
+while (
+    play_again.lower() == "yes"
+    or play_again.lower() == "yup"
+    or play_again.lower() == "yay"
+    or play_again.lower() == "yeah"
+):
+    deck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "Q", "K", "J"]
+    my_cards = []
+    bot_cards = []
+    card_drawn = 0  # the number of the card removed in the array
+    bot_stay = True
+    my_stay = True
 
-initial_draw(deck, my_cards, bot_cards)
-on_table(bot_cards, my_cards)
+    print("\n\n\n\n")
 
-while bot_stay or my_stay:  # why?
-    my_turn(deck)
-    bot_turn(bot_cards)
+    initial_draw(deck, my_cards, bot_cards)
     on_table(bot_cards, my_cards)
 
-print("******************")
+    while bot_stay or my_stay:  # why?
+        my_turn(deck)
+        bot_turn(bot_cards)
+        on_table(bot_cards, my_cards)
 
-if sum_cards(my_cards) == sum_cards(bot_cards):
-    print(
-        f"Tie! your card value is {sum_cards(my_cards)} and the opponent's one is {sum_cards(bot_cards)}"
-    )
-elif abs(sum_cards(my_cards) - 21) < abs(sum_cards(bot_cards) - 21):
-    print(
-        f"Good job!! You won!! your card value is {sum_cards(my_cards)} and the opponent's one is {sum_cards(bot_cards)}"
-    )
-    my_score += 1
-else:
-    print(
-        f"Your opponent won! your card value is {sum_cards(my_cards)} and the opponent's one is {sum_cards(bot_cards)}"
-    )
-    bot_score += 1
+    print("******************")
 
-print(f"Your score: {my_score}\nOpponent's score: {bot_score}")
-play_again = input("\ndo you wanna play again?")
+    if sum_cards(my_cards) == sum_cards(bot_cards):
+        print(
+            f"Tie! your card value is {sum_cards(my_cards)} and the opponent's one is {sum_cards(bot_cards)}"
+        )
+    elif sum_cards(bot_cards) > 21 and sum_cards(my_cards) <= 21:
+        print(
+            f"Good job!! You won!! your card value is {sum_cards(my_cards)} and the opponent's one is {sum_cards(bot_cards)}"
+        )
+        my_score += 1
+    elif sum_cards(my_cards) > 21 and sum_cards(bot_cards) <= 21:
+        print(
+            f"Your opponent won! your card value is {sum_cards(my_cards)} and the opponent's one is {sum_cards(bot_cards)}"
+        )
+        bot_score += 1
+    elif abs(sum_cards(my_cards) - 21) < abs(sum_cards(bot_cards) - 21):
+        print(
+            f"Good job!! You won!! your card value is {sum_cards(my_cards)} and the opponent's one is {sum_cards(bot_cards)}"
+        )
+        my_score += 1
+    else:
+        print(
+            f"Your opponent won! your card value is {sum_cards(my_cards)} and the opponent's one is {sum_cards(bot_cards)}"
+        )
+        bot_score += 1
 
-# if play == 'yes':
-#
-# else:
+    print(f"Your score: {my_score}\nOpponent's score: {bot_score}")
+    play_again = input("\ndo you wanna play again?\n")
