@@ -2,11 +2,6 @@ import random
 from math import *
 
 
-# le variabili che passano tramite valuta e non referenza anche se cambiano nella funzione non
-# cambiano al di fuori a meno che non ci sia un retrun, oppure posso rendere il valore della
-# valuta globale senza inserirla nei paramentri della funzione
-# per esempio my_cards e bot_cards passano tramite referenza quindi cambiano dentro e fuori
-# questo accade principalmente in python
 def initial_draw(deck, my_cards, bot_cards):
     global card_drawn
 
@@ -27,6 +22,7 @@ def my_turn(deck):
     global my_stay
     print("\nit s your turn, do you hit or stay?")
     hit_or_stay = ""
+
     while hit_or_stay.lower() != "hit" and hit_or_stay.lower() != "stay":
         hit_or_stay = input()
         if hit_or_stay.lower() == "hit":
@@ -69,11 +65,7 @@ def on_table(bot_cards, my_cards):
     print(
         "[x] "
         + f"{bot_cards[1:]}   = ? + "
-        + str(
-            sum_cards(bot_cards) - bot_cards[0]  # interesting code
-            if str(bot_cards[0]) not in "KJQ"
-            else sum_cards(bot_cards) - 10
-        )
+        + str(sum_cards(bot_cards[1:]))
         + "\n\n"
         + "[x] "
         + f"{my_cards[1:]}    = "
@@ -87,7 +79,7 @@ my_score = 0  # how many time the player won the black jack
 bot_score = 0  # how many time the bot won the black jack
 
 print(
-    "Welcome to Black Jack, this is slightly different versioin of it, do you want to read the rule?"
+    "Welcome to Black Jack, this is slightly different version of it, do you want to read the rule?"
 )
 
 rule = input()
@@ -122,7 +114,9 @@ while (
     initial_draw(deck, my_cards, bot_cards)
     on_table(bot_cards, my_cards)
 
-    while bot_stay or my_stay:  # why?
+    while (
+        bot_stay or my_stay
+    ):  # as long as one of them is True the while will keep looping
         my_turn(deck)
         bot_turn(bot_cards)
         on_table(bot_cards, my_cards)
