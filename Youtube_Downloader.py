@@ -60,5 +60,5 @@ try:
     time.sleep(60)
 
 except:
-    print("not a valid link or wrong destination")
+    print("Error, wrong destination, link or video age restricted")
     time.sleep(4)
